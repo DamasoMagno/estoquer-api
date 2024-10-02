@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMINISTRATOR
+  EMPLOYEE
+}
+
+enum Origin {
+  INPUT
+  OUTPUT
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  cpf       String
+  email     String
+  birthday  DateTime
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  stock     Stock[]
+  audit     Audit[]
+
+  @@unique([email])
+  @@index([email])
+  @@map("user")
+}
+
+model Product {
+  id           String         @id @default(uuid())
+  name         String
+  description  String?
+  quantity     Int            @default(0)
+  price        Int            @default(0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  stock        Stock[]
+  notification Notification[]
+
+  @@map("product")
+}
+
+model Supplier {
+  id      String @id @default(uuid())
+  name    String
+  contact String
+  email   String
+  phone   String
+
+  @@unique([email])
+  @@index([email])
+  @@map("supplier")
+}
+
+model Stock {
+  id        String   @id @default(uuid())
+  origin    Origin
+  quantity  Int
+  createdAt DateTime @default(now())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("stock")
+}
+
+model Audit {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("audit")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("notification")
+}
