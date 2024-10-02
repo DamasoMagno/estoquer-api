@@ -1,6 +1,6 @@
-# Funcionalidades do Sistema
+# System Requiriments
 
-## Funcionalidades Exigidas
+## Functional Requiriments
 
 - [ ] **Controle de Estoque**
   - [X] Cadastro de produtos no sistema.
@@ -32,7 +32,7 @@
 
 ---
 
-## Tabelas do Banco de Dados
+## Tables
 
 - [ ] **Tabela de Produtos (`product`)**
   - [X] `id`: Identificador único (UUID).
